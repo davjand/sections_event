@@ -22,13 +22,21 @@
 			parent::__construct( $factory, $res );
 
 			$field_ids = array();
-
-			if( !is_null( extension_Members::getFieldHandle( 'identity' ) ) ){
-				$field_ids[] = extension_Members::getField( 'identity' )->get( 'id' );
+			
+			/*
+			
+				HACK TO ALLOW DEFAULT MEMBERS SECTION USAGE
+				
+			*/
+			$memberSection = $this->getMemberSection();
+			
+			
+			if( !is_null( extension_Members::getFieldHandle( 'identity',$memberSection) ) ){
+				$field_ids[] = extension_Members::getField( 'identity', $memberSection )->get( 'id' );
 			}
 
-			if( !is_null( extension_Members::getFieldHandle( 'email' ) ) ){
-				$field_ids[] = extension_Members::getField( 'email' )->get( 'id' );
+			if( !is_null( extension_Members::getFieldHandle( 'email', $memberSection ) ) ){
+				$field_ids[] = extension_Members::getField( 'email', $memberSection )->get( 'id' );
 			}
 
 			// Get data about linking fields that point to the members

@@ -10,8 +10,24 @@
 	{
 
 		private $role_id = null;
+		private $member_section = null;
 
-
+		/**
+		
+			HACK FOR MEMBERS V1.3
+			
+		*/
+		public function getMemberSection(){
+			$memberSection = Symphony::Configuration()->get('section','members');
+			if(strpos($memberSection,',') === FALSE){
+				return (int)$memberSection;
+			}
+			else{
+				$sections = split($memberSection,',');
+				return (int)$sections[0];
+			}
+		}
+		
 
 		/*------------------------------------------------------------------------------------------------*/
 		/*  Public interface  */
@@ -146,7 +162,7 @@
 			/** @var $member Entry */
 			$member = $driver->getMember();
 
-			$role_data = $member->getData( extension_Members::getField( 'role' )->get( 'id' ) );
+			$role_data = $member->getData( extension_Members::getField( 'role' , $this->getMemberSection())->get( 'id' ) );
 
 			$role = RoleManager::fetch( $role_data['role_id'] );
 
