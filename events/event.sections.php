@@ -28,7 +28,16 @@
 		 * @var array
 		 */
 		private $error = false;
+		
+		
+		public $ROOTELEMENT = 'sections_event';
 
+		public $eDefaultValues = array(
+		);
+
+		public $eParamFILTERS = array(
+			
+		);
 
 
 		/*------------------------------------------------------------------------------------------------*/
@@ -1116,6 +1125,17 @@
 				'action'         => $action,
 				'filter_results' => &$filter_results,
 			) );
+			
+			
+			//Fire the symphony event as well
+			Symphony::ExtensionManager()->notifyMembers('EventPostSaveFilter', '/frontend/', array(
+				'entry_id' => $entry->get('id'),
+				'fields' => $fields,
+				'entry' => $entry,
+				'event' => &$this,
+				'messages' => &$filter_results
+			));
+			
 
 			if( is_array( $filter_results ) && !empty($filter_results) ){
 				foreach($filter_results as $fr){
@@ -1126,6 +1146,8 @@
 					);
 				}
 			}
+
+			
 		}
 
 		/**
